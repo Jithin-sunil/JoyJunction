@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage</title>
+</head>
+
+<body>
+    <table border="1" align="center" cellpadding="10" >
+        <tr>
+            <td><a href="{% url 'Admin:AdminRegistration' %}">AdminRegistration</a></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'Admin:District' %}">District</a></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'Admin:Place' %}">Place</a></td>
+        </tr>
+
+        <tr>
+            <td><a href="{% url 'Admin:Category' %}">Category</a></td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'Admin:SubCategory' %}">SubCategory</a></td>
+        </tr>
+    </table>
+</body>
+
+</html>
