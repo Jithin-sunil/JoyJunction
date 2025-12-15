@@ -23,4 +23,8 @@ urlpatterns = [
     path('SubCategory/',views.SubCategory,name='SubCategory'),
     path('delsubcategory/<int:did>/',views.delsubcategory,name='delsubcategory'),
     path('editsubcategory/<int:eid>/',views.editsubcategory,name='editsubcategory'),
+
+    path('SellerVerification/',views.SellerVerification,name='SellerVerification'),
+    path('verifyseller/<int:vid>/',views.verifyseller,name='verifyseller'),
+    path('rejectseller/<int:rid>/',views.rejectseller,name='rejectseller'),
 ]

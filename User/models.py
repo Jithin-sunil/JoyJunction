@@ -2,17 +2,17 @@ from django.db import models
 from Guest.models import *
 from Seller.models import *
 
+
 # Create your models here.
 
 class tbl_booking(models.Model):
     booking_date = models.DateField(auto_now_add=True)
     booking_status = models.IntegerField(default=0)
-    booking_amount = models.IntegerField(null=True)
+    booking_amount = models.CharField(null=True)
     user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
-    product = models.ForeignKey(tbl_product, on_delete=models.CASCADE)
 
 class tbl_cart(models.Model):
-    cart_quantity = models.IntegerField()
+    cart_quantity = models.IntegerField(default=1)
     cart_status = models.IntegerField(default=0)
     booking = models.ForeignKey(tbl_booking, on_delete=models.CASCADE)
     product = models.ForeignKey(tbl_product, on_delete=models.CASCADE)

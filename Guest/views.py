@@ -49,7 +49,7 @@ def SellerRegistration(request):
             seller_contact=contact,
             seller_address=address,
             seller_photo=photo,
-            seler_proof=proof,
+            seller_proof=proof,
             seller_password=password,
             place=placeid,
         )
@@ -68,16 +68,16 @@ def Login(request):
         sellercount = tbl_seller.objects.filter(seller_email=email,seller_password=password).count()
         if usercount >0:
             userdata = tbl_user.objects.get(user_email=email,user_password=password)
-            request.session['user_id'] = userdata.id
+            request.session['uid'] = userdata.id
             return redirect('User:HomePage')
         elif admincount >0:
             admindata = tbl_admin.objects.get(admin_email=email,admin_password=password)
-            request.session['admin_id'] = admindata.id
+            request.session['aid'] = admindata.id
             return redirect('Admin:HomePage')
         elif sellercount >0:
             sellerdata = tbl_seller.objects.get(seller_email=email,seller_password=password)
             if sellerdata.seller_status == 1:
-                request.session['seller_id'] = sellerdata.id
+                request.session['sid'] = sellerdata.id
                 return redirect('Seller:HomePage')
             elif sellerdata.seller_status == 0:
                 return render(request,'Guest/Login.html',{'msg':'Your account is pending approval'})

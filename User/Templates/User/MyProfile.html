@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyProfile</title>
+</head>
+
+<body>
+    <table border="1" align="center" cellpadding="8">
+        <tr>
+            <td colspan="2" align="center"><img src="{{userdata.user_photo.url}}" width="150" alt=""></td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>{{userdata.user_name}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{userdata.user_email}}</td>
+        </tr>
+        <tr>
+            <td>Contact</td>
+            <td>{{userdata.user_contact}}</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>{{userdata.user_address}}</td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>{{userdata.place.district.district_name}}</td>
+        </tr>
+        <tr>
+            <td>Place</td>
+            <td>{{userdata.place.place_name}}</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <a href="{% url 'User:EditProfile' %}">EditProfile</a> |
+                <a href="{% url 'User:ChangePassword' %}">ChangePassword</a>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

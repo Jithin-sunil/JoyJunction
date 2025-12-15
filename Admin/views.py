@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from Admin.models import *
-
+from Guest.models import *
 # Create your views here.
 
 def Homepage(request):
@@ -149,3 +149,21 @@ def editsubcategory(request,eid):
 
     else:
         return render(request,'Admin/SubCategory.html',{'subcategoryobj':subcategoryobj,'categorydata':categorydata})
+
+def SellerVerification(request):
+    sellerdata=tbl_seller.objects.filter(seller_status=0)
+    verified = tbl_seller.objects.filter(seller_status=1)
+    rejected = tbl_seller.objects.filter(seller_status=2)
+    return render(request,'Admin/SellerVerification.html',{'sellerdata':sellerdata,'verified':verified,'rejected':rejected})
+
+def verifyseller(request,vid):
+    sellerobj=tbl_seller.objects.get(id=vid)
+    sellerobj.seller_status=1
+    sellerobj.save()
+    return redirect('Admin:SellerVerification')
+
+def rejectseller(request,rid):
+    sellerobj=tbl_seller.objects.get(id=rid)
+    sellerobj.seller_status=2
+    sellerobj.save()
+    return redirect('Admin:SellerVerification')

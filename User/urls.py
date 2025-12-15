@@ -2,8 +2,14 @@ from django.urls import path
 from User import views
 app_name = 'User'
 urlpatterns = [
-    path('Homepage/', views.Homepage, name='Homepage'),
+    path('HomePage/', views.HomePage, name='HomePage'),
     path('Myprofile/', views.Myprofile, name='Myprofile'),
     path('EditProfile/', views.EditProfile, name='EditProfile'),
     path('ChangePassword/', views.ChangePassword, name='ChangePassword'),
+    path('ViewProduct/', views.ViewProduct, name='ViewProduct'),
+    path('AddCart/<int:pid>/', views.AddCart, name='AddCart'),
+    path('MyCart/', views.MyCart, name='MyCart'),
+    path('DelCart/<int:did>/', views.DelCart, name='DelCart'),
+    path('CartQty/', views.CartQty, name='CartQty'),
+    path('Payment/', views.Payment, name='Payment'),
 ]

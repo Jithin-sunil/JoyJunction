@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Product</title>
+</head>
+
+<body>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table border="1" align="center" cellpadding="10">
+            <tr>
+                <td>
+                    <input type="text" name="txt_search" placeholder="Search Product" >
+                </td>
+                <td><select name="sel_category" id="sel_category">
+                        <option value="">--Select Category--</option>
+                        {% for i in categorys %}
+                        <option value="{{ i.id }}">{{ i.category_name }}</option>
+                        {% endfor %}
+                    </select></td>
+
+                <td>
+                    <select name="sel_subcategory" id="sel_subcategory">
+                        <option value="">--Select SubCategory--</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="submit" value="Search">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br>
+    <table border="1" align="center" cellpadding="10">
+        <tr>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>SubCategory</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Photo</th>
+            <th>Action</th>
+        </tr>
+        {% for i in products %}
+        <tr>
+            <td>{{ i.product_name }}</td>
+            <td>{{ i.category.category_name }}</td>
+            <td>{{ i.subcategory.subcategory_name }}</td>
+            <td>{{ i.product_price }}</td>
+            <td>{{ i.product_description }}</td>
+            <td><img src="{{ i.product_photo.url }}" width="100" height="100"></td>
+            <td>
+                <a href="{% url 'User:AddCart' i.id %}" >Add To Cart</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+{% if msg %}
+<script>
+    alert("{{ msg }}");
+    window.location = "{% url 'User:ViewProduct' %}";
+</script>
+{% endif %}
+
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+    $('#sel_category').change(function () {
+        var cid = $(this).val();
+        var ur = "{% url 'Seller:AjaxSubCategory' %}"
+        $.ajax({
+            url: ur,
+            data: { cid: cid },
+            success: function (data) {
+                $('#sel_subcategory').html(data);
+            }
+        });
+    });
+</script>

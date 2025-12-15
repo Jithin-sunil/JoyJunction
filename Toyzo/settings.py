@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'Guest',  
     'User',
     'Seller',
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

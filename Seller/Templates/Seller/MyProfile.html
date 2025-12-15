@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyProfile</title>
+</head>
+
+<body>
+    <table border="1" align="center" cellpadding="8">
+        <tr>
+            <td colspan="2" align="center"><img src="{{sellerdata.seller_photo.url}}" width="150" alt=""></td>
+        </tr>
+        <tr>
+            <td>Name</td>
+            <td>{{sellerdata.seller_name}}</td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td>{{sellerdata.seller_email}}</td>
+        </tr>
+        <tr>
+            <td>Contact</td>
+            <td>{{sellerdata.seller_contact}}</td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td>{{sellerdata.seller_address}}</td>
+        </tr>
+        <tr>
+            <td>District</td>
+            <td>{{sellerdata.place.district.district_name}}</td>
+        </tr>
+        <tr>
+            <td>Place</td>
+            <td>{{sellerdata.place.place_name}}</td>
+        </tr>
+        <tr>
+            <td colspan="2" align="center">
+                <a href="{% url 'Seller:EditProfile' %}">EditProfile</a> |
+                <a href="{% url 'Seller:ChangePassword' %}">ChangePassword</a>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
