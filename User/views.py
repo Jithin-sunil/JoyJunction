@@ -134,4 +134,18 @@ def CartQty(request):
 
 def Payment(request):
     bookingdata=tbl_booking.objects.get(id=request.session["bookingid"])
-    return render(request,"User/Payment.html",{'bookingdata':bookingdata})
+    amount=bookingdata.booking_amount
+    if request.method == "POST":
+        bookingdata.booking_status = 2
+        bookingdata.save()
+        return redirect("User:Loader")
+    else:
+        return render(request,"User/Payment.html",{'amount':amount})
+
+def Loader(request):
+    return render(request,"User/Loader.html")
+
+def Payment_suc(request):
+    return render(request,"User/Payment_suc.html")
+
+    

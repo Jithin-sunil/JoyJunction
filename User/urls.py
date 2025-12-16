@@ -12,4 +12,6 @@ urlpatterns = [
     path('DelCart/<int:did>/', views.DelCart, name='DelCart'),
     path('CartQty/', views.CartQty, name='CartQty'),
     path('Payment/', views.Payment, name='Payment'),
+    path('Loader/', views.Loader, name='Loader'),
+    path('Payment_suc/', views.Payment_suc, name='Payment_suc'),
 ]
