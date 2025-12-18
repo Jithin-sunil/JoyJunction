@@ -148,4 +148,6 @@ def Loader(request):
 def Payment_suc(request):
     return render(request,"User/Payment_suc.html")
 
-    
+def MyBooking(request):
+    bookingdata = tbl_booking.objects.filter(user=request.session['uid'],booking_status__gte=0)
+    return render(request,"User/MyBooking.html",{'bookingdata':bookingdata})

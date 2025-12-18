@@ -1,0 +1,58 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Booking</title>
+</head>
+
+<body>
+
+    <table border="1" cellpadding="10" width="100%">
+        {% for i in bookingdata %}
+        <tr style="background:#f2f2f2">
+            <td colspan="4">
+                <strong>Order Number :</strong> #{{ i.id }} <br>
+                <strong>Date :</strong> {{ i.booking_date }} <br>
+                <strong>Total Amount :</strong> ₹{{ i.booking_amount }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>SNO</th>
+            <th>Photo</th>
+            <th>Product Details</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+
+        </tr>
+
+        {% for j in i.tbl_cart_set.all %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td> <img src="{{ j.product.product_photo.url }}" width="150" alt=""> </td>
+            <td> Name: {{ j.product.product_name }} <br>
+                Details :{{ j.product.product_description }} <br> 
+               Price: {{ j.product.product_price }} <br> 
+
+            </td>
+            <td>{{ j.cart_quantity }}</td>
+            <td> {{j.cart_quantity|mul:j.product.product_price}} </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No items found</td>
+        </tr>
+        {% endfor %}
+
+        {% empty %}
+        <tr>
+            <td>No bookings found</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>

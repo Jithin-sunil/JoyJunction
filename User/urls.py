@@ -14,4 +14,5 @@ urlpatterns = [
     path('Payment/', views.Payment, name='Payment'),
     path('Loader/', views.Loader, name='Loader'),
     path('Payment_suc/', views.Payment_suc, name='Payment_suc'),
+    path('MyBooking/',views.MyBooking,name="MyBooking")
 ]
