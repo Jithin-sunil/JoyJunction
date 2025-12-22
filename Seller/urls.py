@@ -10,4 +10,7 @@ urlpatterns = [
     path('AjaxSubCategory/', views.AjaxSubCategory, name='AjaxSubCategory'),
     path('delproduct/<int:pid>/', views.delproduct, name='delproduct'),
     path('AddStock/<int:pid>/', views.AddStock, name='AddStock'),
+    path('ViewBookings/', views.ViewBookings, name='ViewBookings'),
+    path('UpdateCartStatus/<int:cid>/<int:status>/',views.UpdateCartStatus,name='UpdateCartStatus')
+
 ]

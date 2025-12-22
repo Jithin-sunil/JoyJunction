@@ -18,11 +18,11 @@ class tbl_cart(models.Model):
     product = models.ForeignKey(tbl_product, on_delete=models.CASCADE)
 
 class tbl_rating(models.Model):
-    rating_value = models.IntegerField()
-    rating_review = models.CharField(max_length=500)
-    rating_datetime = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(tbl_user, on_delete=models.CASCADE)
-    product = models.ForeignKey(tbl_product, on_delete=models.CASCADE)
+    rating_data=models.IntegerField()
+    user=models.ForeignKey(tbl_user,on_delete=models.CASCADE)
+    user_review=models.CharField(max_length=500)
+    product=models.ForeignKey(tbl_product,on_delete=models.CASCADE)
+    datetime=models.DateTimeField(auto_now_add=True)
 
 class tbl_complaint(models.Model):
     complaint_title = models.CharField(max_length=200)

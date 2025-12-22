@@ -3,6 +3,8 @@ from Guest.models import *
 from Seller.models import *
 from User.models import *
 from django.db.models import Sum
+from django.http import JsonResponse
+from datetime import datetime
 # Create your views here.
 
 def HomePage(request):
@@ -133,14 +135,21 @@ def CartQty(request):
    return redirect("User:MyCart")
 
 def Payment(request):
-    bookingdata=tbl_booking.objects.get(id=request.session["bookingid"])
-    amount=bookingdata.booking_amount
+    bookingdata = tbl_booking.objects.get(id=request.session["bookingid"])
+    amount = bookingdata.booking_amount
+
     if request.method == "POST":
         bookingdata.booking_status = 2
         bookingdata.save()
+
+        cart = tbl_cart.objects.filter(booking=bookingdata)
+        for i in cart:
+            i.cart_status = 2
+            i.save()
+
         return redirect("User:Loader")
     else:
-        return render(request,"User/Payment.html",{'amount':amount})
+            return render(request,"User/Payment.html",{'amount':amount})
 
 def Loader(request):
     return render(request,"User/Loader.html")
@@ -151,3 +160,58 @@ def Payment_suc(request):
 def MyBooking(request):
     bookingdata = tbl_booking.objects.filter(user=request.session['uid'],booking_status__gte=0)
     return render(request,"User/MyBooking.html",{'bookingdata':bookingdata})
+
+def rating(request,mid):
+    parray=[1,2,3,4,5]
+    mid=mid
+    # wdata=tbl_booking.objects.get(id=mid)
+    
+    counts=0
+    counts=stardata=tbl_rating.objects.filter(product=mid).count()
+    if counts>0:
+        res=0
+        stardata=tbl_rating.objects.filter(product=mid).order_by('-datetime')
+        for i in stardata:
+            res=res+i.rating_data
+        avg=res//counts
+        # print(avg)
+        return render(request,"User/Rating.html",{'mid':mid,'data':stardata,'ar':parray,'avg':avg,'count':counts})
+    else:
+         return render(request,"User/Rating.html",{'mid':mid})
+
+def ajaxstar(request):
+    parray=[1,2,3,4,5]
+    rating_data=request.GET.get('rating_data')
+    
+    user_review=request.GET.get('user_review')
+    pid=request.GET.get('pid')
+    # wdata=tbl_booking.objects.get(id=pid)
+    tbl_rating.objects.create(user=tbl_user.objects.get(id=request.session['uid']),user_review=user_review,rating_data=rating_data,product=tbl_product.objects.get(id=pid))
+    stardata=tbl_rating.objects.filter(product=pid).order_by('-datetime')
+    return render(request,"User/AjaxRating.html",{'data':stardata,'ar':parray})
+
+def starrating(request):
+    r_len = 0
+    five = four = three = two = one = 0
+    # cdata = tbl_booking.objects.get(id=request.GET.get("pdt"))
+    rate = tbl_rating.objects.filter(product=request.GET.get("pdt"))
+    ratecount = tbl_rating.objects.filter(product=request.GET.get("pdt")).count()
+    for i in rate:
+        if int(i.rating_data) == 5:
+            five = five + 1
+        elif int(i.rating_data) == 4:
+            four = four + 1
+        elif int(i.rating_data) == 3:
+            three = three + 1
+        elif int(i.rating_data) == 2:
+            two = two + 1
+        elif int(i.rating_data) == 1:
+            one = one + 1
+        else:
+            five = four = three = two = one = 0
+        # print(i.rating_data)
+        # r_len = r_len + int(i.rating_data)
+    # rlen = r_len // 5
+    # print(rlen)
+    result = {"five":five,"four":four,"three":three,"two":two,"one":one,"total_review":ratecount}
+    return JsonResponse(result)

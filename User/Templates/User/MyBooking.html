@@ -11,44 +11,84 @@
 
     <table border="1" cellpadding="10" width="100%">
         {% for i in bookingdata %}
+
+        <!-- Booking Header -->
         <tr style="background:#f2f2f2">
-            <td colspan="4">
+            <td colspan="6">
                 <strong>Order Number :</strong> #{{ i.id }} <br>
                 <strong>Date :</strong> {{ i.booking_date }} <br>
-                <strong>Total Amount :</strong> ₹{{ i.booking_amount }}
+                <strong>Total Amount :</strong> ₹{{ i.booking_amount }} <br>
+
+                <strong>Status :</strong>
+                {% if i.booking_status == 1 %}
+                💳 Payment Pending
+                {% elif i.booking_status == 2 %}
+                ✅ Payment Completed
+                {% elif i.booking_status == 3 %}
+                <span style="color:green;font-weight:bold;">
+                    🎉 Booking Completed
+                </span>
+                {% endif %}
             </td>
         </tr>
 
+        <!-- Table Head -->
         <tr>
             <th>SNO</th>
             <th>Photo</th>
             <th>Product Details</th>
-            <th>Quantity</th>
+            <th>Qty</th>
             <th>Amount</th>
-
+            <th>Tracking Status</th>
+            <th>Action</th>
         </tr>
 
+        <!-- Products -->
         {% for j in i.tbl_cart_set.all %}
         <tr>
             <td>{{ forloop.counter }}</td>
-            <td> <img src="{{ j.product.product_photo.url }}" width="150" alt=""> </td>
-            <td> Name: {{ j.product.product_name }} <br>
-                Details :{{ j.product.product_description }} <br> 
-               Price: {{ j.product.product_price }} <br> 
-
+            <td>
+                <img src="{{ j.product.product_photo.url }}" width="120">
+            </td>
+            <td>
+                <strong>{{ j.product.product_name }}</strong><br>
+                {{ j.product.product_description }}<br>
+                ₹{{ j.product.product_price }}
             </td>
             <td>{{ j.cart_quantity }}</td>
-            <td> {{j.cart_quantity|mul:j.product.product_price}} </td>
+            <td>₹{{ j.cart_quantity|mul:j.product.product_price }}</td>
+
+            <!-- Product Status -->
+            <td>
+                {% if j.cart_status == 0 %} 🛒 In Cart {% endif %}
+                {% if j.cart_status == 1 %} 💳 Payment Pending {% endif %}
+                {% if j.cart_status == 2 %} ✅ Payment Successful {% endif %}
+                {% if j.cart_status == 3 %} 📦 Packed {% endif %}
+                {% if j.cart_status == 4 %} 🚚 Shipped {% endif %}
+                {% if j.cart_status == 5 %} 📍 Out for Delivery {% endif %}
+                {% if j.cart_status == 6 %}
+                <span style="color:green;font-weight:bold;">
+                    🎉 Delivered
+                </span>
+                {% endif %}
+            </td>
+            <td>
+                {% if j.cart_status == 6 %}
+                <a href="{% url 'User:rating' j.product.id %}">Give Review & Rating</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
         </tr>
         {% empty %}
         <tr>
-            <td colspan="2">No items found</td>
+            <td colspan="6">No items found</td>
         </tr>
         {% endfor %}
 
         {% empty %}
         <tr>
-            <td>No bookings found</td>
+            <td colspan="6">No bookings found</td>
         </tr>
         {% endfor %}
     </table>

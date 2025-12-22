@@ -1,0 +1,97 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Seller - View Bookings</title>
+</head>
+
+<body>
+
+    <table border="1" cellpadding="10" width="100%">
+        {% for b in bookings %}
+
+        <tr style="background:#e8f0ff">
+            <td colspan="6">
+                <strong>Order #:</strong> {{ b.id }} <br>
+                <strong>Date:</strong> {{ b.booking_date }} <br>
+                <strong>Total Order Amount:</strong> ₹{{ b.booking_amount }} <br>
+                <strong>Customer:</strong> {{ b.user.user_name }}
+            </td>
+        </tr>
+
+        <tr>
+            <th>SNO</th>
+            <th>Photo</th>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+
+        {% for c in b.tbl_cart_set.all %}
+        {% if c.product.seller_id == request.session.sid %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+                <img src="{{ c.product.product_photo.url }}" width="100">
+            </td>
+            <td>
+                <strong>{{ c.product.product_name }}</strong><br>
+                {{ c.product.product_description }}<br>
+                ₹{{ c.product.product_price }}
+            </td>
+            <td>{{ c.cart_quantity }}</td>
+            <td>
+                ₹{{ c.cart_quantity|mul:c.product.product_price }}
+            </td>
+            <td>
+                {% if c.cart_status == 2 %}
+                <a href="{% url 'Seller:UpdateCartStatus' c.id 3 %}">
+                    📦 Mark as Packed
+                </a>
+
+                {% elif c.cart_status == 3 %}
+                <a href="{% url 'Seller:UpdateCartStatus' c.id 4 %}">
+                    🚚 Mark as Shipped
+                </a>
+
+                {% elif c.cart_status == 4 %}
+                <a href="{% url 'Seller:UpdateCartStatus' c.id 5 %}">
+                    📍 Mark as Out for Delivery
+                </a>
+
+                {% elif c.cart_status == 5 %}
+                <a href="{% url 'Seller:UpdateCartStatus' c.id 6 %}">
+                    ✅ Mark as Delivered
+                </a>
+
+                {% elif c.cart_status == 6 %}
+                <span style="color:green; font-weight:bold;">
+                    🎉 Delivered Successfully
+                </span>
+
+                {% else %}
+                <span style="color:gray;">
+                    ⏳ Waiting for Payment
+                </span>
+                {% endif %}
+            </td>
+
+
+        </tr>
+        {% endif %}
+        {% endfor %}
+
+        {% empty %}
+        <tr>
+            <td colspan="6">No bookings found</td>
+        </tr>
+
+        {% endfor %}
+    </table>
+
+</body>
+
+</html>

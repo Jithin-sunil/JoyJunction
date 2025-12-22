@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from Seller.models import *
+from User.models import *
 # Create your views here.
 
 
@@ -89,3 +90,20 @@ def AddStock(request, pid):
         return render(request, 'Seller/Stock.html', { 'msg': 'Stock Added Successfully'})
     else:
         return render(request, 'Seller/Stock.html', { 'stockdata': stock})
+
+def ViewBookings(request):
+    bookings = tbl_booking.objects.filter(tbl_cart__product__seller_id=request.session['sid'])
+    return render(request, 'Seller/ViewBookings.html', {'bookings': bookings})
+
+def UpdateCartStatus(request, cid, status):
+    cart = tbl_cart.objects.get(id=cid)
+    cart.cart_status = status
+    cart.save()
+    booking = cart.booking
+    total_items = tbl_cart.objects.filter(booking=booking).count()
+    delivered_items = tbl_cart.objects.filter(booking=booking,cart_status=6).count()
+    if total_items == delivered_items:
+        booking.booking_status = 3
+        booking.save()
+    return redirect("Seller:ViewBookings")
+

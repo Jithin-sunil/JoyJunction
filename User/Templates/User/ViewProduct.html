@@ -13,15 +13,16 @@
         <table border="1" align="center" cellpadding="10">
             <tr>
                 <td>
-                    <input type="text" name="txt_search" placeholder="Search Product" >
+                    <input type="text" name="txt_search" placeholder="Search Product">
                 </td>
-                <td><select name="sel_category" id="sel_category">
+                <td>
+                    <select name="sel_category" id="sel_category">
                         <option value="">--Select Category--</option>
                         {% for i in categorys %}
                         <option value="{{ i.id }}">{{ i.category_name }}</option>
                         {% endfor %}
-                    </select></td>
-
+                    </select>
+                </td>
                 <td>
                     <select name="sel_subcategory" id="sel_subcategory">
                         <option value="">--Select SubCategory--</option>
@@ -33,31 +34,58 @@
             </tr>
         </table>
     </form>
+
     <br>
-    <table border="1" align="center" cellpadding="10">
+
+    <table align="center" cellpadding="10">
         <tr>
-            <th>Product Name</th>
-            <th>Category</th>
-            <th>SubCategory</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Photo</th>
-            <th>Action</th>
-        </tr>
-        {% for i in products %}
-        <tr>
-            <td>{{ i.product_name }}</td>
-            <td>{{ i.category.category_name }}</td>
-            <td>{{ i.subcategory.subcategory_name }}</td>
-            <td>{{ i.product_price }}</td>
-            <td>{{ i.product_description }}</td>
-            <td><img src="{{ i.product_photo.url }}" width="100" height="100"></td>
-            <td>
-                <a href="{% url 'User:AddCart' i.id %}" >Add To Cart</a>
+            {% for i in products %}
+            <td valign="top">
+                <fieldset style="width:250px;">
+                    <legend><strong>{{ i.product_name }}</strong></legend>
+
+                    <p>
+                        <strong>Category:</strong>
+                        {{ i.subcategory.category.category_name }}
+                    </p>
+
+                    <p>
+                        <strong>SubCategory:</strong>
+                        {{ i.subcategory.subcategory_name }}
+                    </p>
+
+                    <p>
+                        <strong>Price:</strong>
+                        ₹{{ i.product_price }}
+                    </p>
+
+                    <p>
+                        <strong>Description:</strong>
+                        {{ i.product_description }}
+                    </p>
+
+                    <p align="center">
+                        <img src="{{ i.product_photo.url }}" width="120" height="120">
+                    </p>
+
+                    <p>
+                        
+                    </p>
+
+                    <p align="center">
+                        <a href="{% url 'User:AddCart' i.id %}">Add To Cart</a>
+                    </p>
+                </fieldset>
             </td>
+
+            {% if forloop.counter|divisibleby:3 %}
         </tr>
-        {% endfor %}
+        <tr>
+            {% endif %}
+            {% endfor %}
+        </tr>
     </table>
+
 </body>
 
 {% if msg %}
