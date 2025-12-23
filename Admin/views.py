@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from Admin.models import *
 from Guest.models import *
+from User.models import *
 # Create your views here.
 
 def Homepage(request):
@@ -167,3 +168,18 @@ def rejectseller(request,rid):
     sellerobj.seller_status=2
     sellerobj.save()
     return redirect('Admin:SellerVerification')
+
+def ViewComplaint(request):
+    complaintdata=tbl_complaint.objects.all()
+    return render(request,'Admin/ViewComplaint.html',{'complaintdata':complaintdata})
+
+def ReplyComplaint(request,cid):
+    complaintobj=tbl_complaint.objects.get(id=cid)
+    if request.method=='POST':
+        reply=request.POST.get('txt_reply')
+        complaintobj.complaint_reply=reply
+        complaintobj.complaint_status=1
+        complaintobj.save()
+        return redirect('Admin:ViewComplaint')
+    else:
+        return render(request,'Admin/Reply.html',{'complaintobj':complaintobj})

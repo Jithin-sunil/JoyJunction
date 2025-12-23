@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Product</title>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"
+        integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
+<style>
+    .text-warning {
+        color: orange;
+    }
+</style>
 
 <body>
     <form action="" method="post">
@@ -39,7 +47,7 @@
 
     <table align="center" cellpadding="10">
         <tr>
-            {% for i in products %}
+            {% for i,j in products %}
             <td valign="top">
                 <fieldset style="width:250px;">
                     <legend><strong>{{ i.product_name }}</strong></legend>
@@ -68,12 +76,25 @@
                         <img src="{{ i.product_photo.url }}" width="120" height="120">
                     </p>
 
-                    <p>
-                        
+                    <p align="center">
+
+                        {% for k in ar %}
+                        {% if k <= j %} <i class="fa-solid fa-star text-warning"></i>
+                            {% else %}
+                            <i class="fa-solid fa-star star-light"></i>
+                            {% endif %}
+                            {% endfor %}
+
                     </p>
 
                     <p align="center">
+
+                        {% if i.total_stock == 0 %}
+                        <span style="color: red;">Out Of Stock</span>
+                        {% else %}
                         <a href="{% url 'User:AddCart' i.id %}">Add To Cart</a>
+                        {% endif %}
+
                     </p>
                 </fieldset>
             </td>

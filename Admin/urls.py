@@ -27,4 +27,7 @@ urlpatterns = [
     path('SellerVerification/',views.SellerVerification,name='SellerVerification'),
     path('verifyseller/<int:vid>/',views.verifyseller,name='verifyseller'),
     path('rejectseller/<int:rid>/',views.rejectseller,name='rejectseller'),
+
+    path('ViewComplaint/', views.ViewComplaint, name='ViewComplaint'),
+    path('ReplyComplaint/<int:cid>/', views.ReplyComplaint, name='ReplyComplaint'),
 ]

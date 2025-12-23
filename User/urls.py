@@ -18,4 +18,6 @@ urlpatterns = [
     path('rating/<int:mid>',views.rating,name="rating"),  
     path('ajaxstar/',views.ajaxstar,name="ajaxstar"),
     path('starrating/',views.starrating,name="starrating"),
+    path('Complaint/', views.Complaint, name='Complaint'),
+    path('DeleteComplaint/<int:cid>/', views.DeleteComplaint, name='DeleteComplaint'),
 ]

@@ -48,26 +48,80 @@ def ChangePassword(request):
 
 def ViewProduct(request):
     categorys = tbl_category.objects.all()
+    ar = [1, 2, 3, 4, 5]
+
+    # ---------- Base queryset ----------
     products = tbl_product.objects.all()
+
+    # ---------- POST FILTERING ----------
     if request.method == "POST":
         name = request.POST.get("txt_search")
         category_id = request.POST.get("sel_category")
         subcatergory_id = request.POST.get("sel_subcategory")
+
         if category_id == "" and subcatergory_id == "" and name != "":
             products = tbl_product.objects.filter(product_name__icontains=name)
+
         elif name != "" and category_id != "" and subcatergory_id == "":
-            products = tbl_product.objects.filter(product_name__icontains=name,subcategory__category=category_id)
+            products = tbl_product.objects.filter(
+                product_name__icontains=name,
+                subcategory__category=category_id
+            )
+
         elif name != "" and subcatergory_id != "" and category_id != "":
-            products = tbl_product.objects.filter(product_name__icontains=name,subcategory=subcatergory_id)
+            products = tbl_product.objects.filter(
+                product_name__icontains=name,
+                subcategory=subcatergory_id
+            )
+
         elif subcatergory_id != "":
             products = tbl_product.objects.filter(subcategory=subcatergory_id)
+
         elif category_id != "":
-            products = tbl_product.objects.filter(subcategory__category=category_id)    
+            products = tbl_product.objects.filter(subcategory__category=category_id)
+
         else:
             products = tbl_product.objects.all()
-        return render(request,'User/ViewProduct.html',{'products':products,'categorys':categorys})
-    else:
-        return render(request,'User/ViewProduct.html',{'products':products,'categorys':categorys})
+
+    # ---------- COMMON LOGIC (USED FOR BOTH GET & POST) ----------
+    parry = []
+
+    for i in products:
+        total_stock = tbl_stock.objects.filter(
+            product=i.id
+        ).aggregate(total=Sum('stock_quantity'))['total'] or 0
+
+        total_cart = tbl_cart.objects.filter(
+            product=i.id,
+            cart_status=1
+        ).aggregate(total=Sum('cart_quantity'))['total'] or 0
+
+        i.total_stock = total_stock - total_cart
+
+        tot = 0
+        ratecount = tbl_rating.objects.filter(product=i.id).count()
+
+        if ratecount > 0:
+            ratedata = tbl_rating.objects.filter(product=i.id)
+            for j in ratedata:
+                tot += j.rating_data
+            avg = tot // ratecount
+            parry.append(avg)
+        else:
+            parry.append(0)
+
+    datas = zip(products, parry)
+
+    # ---------- SINGLE RENDER ----------
+    return render(
+        request,
+        'User/ViewProduct.html',
+        {
+            'products': datas,
+            'categorys': categorys,
+            'ar': ar
+        }
+    )
 
 
 def AddCart(request,pid):
@@ -215,3 +269,19 @@ def starrating(request):
     # print(rlen)
     result = {"five":five,"four":four,"three":three,"two":two,"one":one,"total_review":ratecount}
     return JsonResponse(result)
+
+
+def Complaint(request):
+    complaintdata = tbl_complaint.objects.filter(user=request.session['uid'])
+    if request.method == "POST":
+        title = request.POST.get("txt_title")
+        content = request.POST.get("txt_content")
+        userdata = tbl_user.objects.get(id=request.session['uid'])
+        tbl_complaint.objects.create(user=userdata,complaint_title=title,complaint_content=content)
+        return render(request,'User/Complaint.html',{'msg':'Complaint Submitted Successfully'})
+    else:
+        return render(request,'User/Complaint.html',{'complaintdata':complaintdata})
+    
+def DeleteComplaint(request,cid):
+    tbl_complaint.objects.get(id=cid).delete()
+    return redirect("User:Complaint")

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViewComplaint</title>
+</head>
+
+<body>
+    <h3 align="center">New Complaints</h3>
+    <table border="1" cellpadding="10" align="center">
+
+        <tr>
+            <th>SNO</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+        {% for i in complaints %}
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{ i.user.user_name }} <br>
+                {{ i.user.user_email }}
+            </td>
+            <td>{{ i.complaint_title }}</td>
+            <td>{{ i.complaint_content }}</td>
+            <td>{{ i.complaint_date }}</td>
+            <td>
+                <a href="{% url 'Admin:ReplyComplaint' i.id %}">Replu</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Replied Complaints</h3>
+    <table border="1" cellpadding="10" align="center">
+
+        <tr>
+            <th>SNO</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Date</th>
+            <th>Reply</th>
+        </tr>
+        {% for i in repliedcomplaints %}
+        <tr>
+            <td>{{ forloop.counter}}</td>
+            <td>{{ i.user.user_name }} <br>
+                {{ i.user.user_email }}
+            </td>
+            <td>{{ i.complaint_title }}</td>
+            <td>{{ i.complaint_content }}</td>
+            <td>{{ i.complaint_date }}</td>
+            <td>{{ i.reply_content }}</td>
+        </tr>
+        {% endfor %}
+</body>
+
+</html>
