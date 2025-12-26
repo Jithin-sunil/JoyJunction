@@ -78,7 +78,9 @@
             <td>{{ i.product_description }}</td>
             <td><img src="{{ i.product_photo.url }}" width="100" height="100"></td>
             <td><a href="{% url 'Seller:delproduct' i.id %}">Delete</a> |
-                <a href="{% url 'Seller:AddStock' i.id %}">Add Stock</a>
+                <a href="{% url 'Seller:AddStock' i.id %}">Add Stock</a> | 
+                <a href="{% url 'Seller:Gallery' i.id %}">Gallery</a> |
+                <a href="{% url 'Seller:ViewRating' i.id %}">View Rating</a>
             </td>
         </tr>
         {% endfor %}

@@ -7,6 +7,7 @@ urlpatterns = [
     path('EditProfile/', views.EditProfile, name='EditProfile'),
     path('ChangePassword/', views.ChangePassword, name='ChangePassword'),
     path('ViewProduct/', views.ViewProduct, name='ViewProduct'),
+    path('ViewMore/<int:pid>/', views.ViewMore, name='ViewMore'),
     path('AddCart/<int:pid>/', views.AddCart, name='AddCart'),
     path('MyCart/', views.MyCart, name='MyCart'),
     path('DelCart/<int:did>/', views.DelCart, name='DelCart'),

@@ -169,6 +169,11 @@ def rejectseller(request,rid):
     sellerobj.save()
     return redirect('Admin:SellerVerification')
 
+
+def UserList(request):
+    userdata=tbl_user.objects.all()
+    return render(request,'Admin/UserList.html',{'userdata':userdata})
+
 def ViewComplaint(request):
     complaintdata=tbl_complaint.objects.all()
     return render(request,'Admin/ViewComplaint.html',{'complaintdata':complaintdata})

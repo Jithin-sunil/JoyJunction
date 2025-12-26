@@ -87,9 +87,31 @@ def AddStock(request, pid):
             stock_quantity=quantity,
             product=product
         )
-        return render(request, 'Seller/Stock.html', { 'msg': 'Stock Added Successfully'})
+        return render(request, 'Seller/Stock.html', { 'msg': 'Stock Added Successfully','pid':pid})
     else:
-        return render(request, 'Seller/Stock.html', { 'stockdata': stock})
+        return render(request, 'Seller/Stock.html', { 'stockdata': stock,'pid':pid})
+
+def delstock(request, sid, pid):
+    tbl_stock.objects.get(id=sid).delete()
+    return redirect('Seller:AddStock', pid=pid)
+
+def Gallery(request, pid):
+    galleryphotos = tbl_gallery.objects.filter(product=pid)
+    if request.method == "POST":
+        photos = request.FILES.getlist("file_photo")
+        product = tbl_product.objects.get(id=pid)
+        for photo in photos:
+            tbl_gallery.objects.create(
+                gallery_photo=photo,
+                product=product
+            )
+        return render(request, 'Seller/Gallery.html', {'msg': 'Photos Added Successfully','pid':pid})
+    else:
+        return render(request, 'Seller/Gallery.html', {'galleryphotos': galleryphotos,'pid':pid})
+
+def delgallery(request, gid, pid):
+    tbl_gallery.objects.get(id=gid).delete()
+    return redirect('Seller:Gallery', pid=pid)
 
 def ViewBookings(request):
     bookings = tbl_booking.objects.filter(tbl_cart__product__seller_id=request.session['sid'])
@@ -107,3 +129,47 @@ def UpdateCartStatus(request, cid, status):
         booking.save()
     return redirect("Seller:ViewBookings")
 
+
+def ViewRating(request,pid):
+    parray=[1,2,3,4,5]
+    mid=pid
+    # wdata=tbl_booking.objects.get(id=mid)
+    
+    counts=0
+    counts=stardata=tbl_rating.objects.filter(product=mid).count()
+    if counts>0:
+        res=0
+        stardata=tbl_rating.objects.filter(product=mid).order_by('-datetime')
+        for i in stardata:
+            res=res+i.rating_data
+        avg=res//counts
+        # print(avg)
+        return render(request,"Seller/ViewRating.html",{'mid':mid,'data':stardata,'ar':parray,'avg':avg,'count':counts})
+    else:
+         return render(request,"Seller/ViewRating.html",{'mid':mid})
+
+def starrating(request):
+    r_len = 0
+    five = four = three = two = one = 0
+    # cdata = tbl_booking.objects.get(id=request.GET.get("pdt"))
+    rate = tbl_rating.objects.filter(product=request.GET.get("pdt"))
+    ratecount = tbl_rating.objects.filter(product=request.GET.get("pdt")).count()
+    for i in rate:
+        if int(i.rating_data) == 5:
+            five = five + 1
+        elif int(i.rating_data) == 4:
+            four = four + 1
+        elif int(i.rating_data) == 3:
+            three = three + 1
+        elif int(i.rating_data) == 2:
+            two = two + 1
+        elif int(i.rating_data) == 1:
+            one = one + 1
+        else:
+            five = four = three = two = one = 0
+        # print(i.rating_data)
+        # r_len = r_len + int(i.rating_data)
+    # rlen = r_len // 5
+    # print(rlen)
+    result = {"five":five,"four":four,"three":three,"two":two,"one":one,"total_review":ratecount}
+    return JsonResponse(result)

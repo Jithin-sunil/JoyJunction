@@ -3,11 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ViewMore</title>
-</head>
-<body>
-    <table border="1" align="center" cellpadding="10">
+    <title>{{ product.product_name }} - Details</title>
 
-    </table>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+</head>
+
+<body>
+
+<table align="center" cellpadding="10" width="80%" border="1">
+    <tr>
+        <!-- LEFT SIDE : PRODUCT INFO -->
+        <td valign="top" width="50%">
+            <h2>{{ product.product_name }}</h2>
+
+            <p><strong>Seller:</strong> {{ seller.seller_name }}</p>
+
+            <p><strong>Category:</strong>
+                {{ product.subcategory.category.category_name }}
+            </p>
+
+            <p><strong>SubCategory:</strong>
+                {{ product.subcategory.subcategory_name }}
+            </p>
+
+            <p><strong>Price:</strong> ₹{{ product.product_price }}</p>
+
+            <p>
+                <strong>Availability:</strong>
+                {% if available <= 0 %}
+                    <font color="red"><b>Out Of Stock</b></font>
+                {% else %}
+                    <font color="green"><b>{{ available }} in stock</b></font>
+                {% endif %}
+            </p>
+
+            <p>
+                <strong>Rating:</strong>
+                {% for i in ar %}
+                    {% if i <= avg %}
+                        <i class="fa-solid fa-star" style="color:orange;"></i>
+                    {% else %}
+                        <i class="fa-solid fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+                ({{ ratecount }} reviews)
+            </p>
+
+            <p>
+                <a href="{% url 'User:AddCart' product.id %}">Add To Cart</a> |
+                <a href="{% url 'User:rating' product.id %}">View / Write Rating</a>
+            </p>
+
+            <hr>
+
+            <h4>Description</h4>
+            <p>{{ product.product_description }}</p>
+        </td>
+
+        <!-- RIGHT SIDE : IMAGES -->
+        <td valign="top" align="center" width="50%">
+            <img id="mainPhoto" src="{{ product.product_photo.url }}" width="300" height="300" border="1">
+            <br><br>
+
+            {% for g in gallery %}
+                <img src="{{ g.gallery_photo.url }}" width="80" height="80" border="1"
+                     onclick="document.getElementById('mainPhoto').src='{{ g.gallery_photo.url }}'">
+            {% endfor %}
+        </td>
+    </tr>
+</table>
+
 </body>
 </html>

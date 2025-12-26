@@ -28,6 +28,8 @@ urlpatterns = [
     path('verifyseller/<int:vid>/',views.verifyseller,name='verifyseller'),
     path('rejectseller/<int:rid>/',views.rejectseller,name='rejectseller'),
 
+    path('UserList/', views.UserList, name='UserList'),
+
     path('ViewComplaint/', views.ViewComplaint, name='ViewComplaint'),
     path('ReplyComplaint/<int:cid>/', views.ReplyComplaint, name='ReplyComplaint'),
 ]

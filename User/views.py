@@ -124,6 +124,42 @@ def ViewProduct(request):
     )
 
 
+def ViewMore(request, pid):
+    product = tbl_product.objects.get(id=pid)
+    gallery = tbl_gallery.objects.filter(product=product)
+
+    total_stock = tbl_stock.objects.filter(
+        product=product
+    ).aggregate(total=Sum('stock_quantity'))['total'] or 0
+
+    total_cart = tbl_cart.objects.filter(
+        product=product,
+        cart_status=1
+    ).aggregate(total=Sum('cart_quantity'))['total'] or 0
+
+    available = total_stock - total_cart
+
+    ratecount = tbl_rating.objects.filter(product=product).count()
+    avg = 0
+
+    if ratecount > 0:
+        tot = tbl_rating.objects.filter(product=product)\
+            .aggregate(total=Sum('rating_data'))['total'] or 0
+        avg = tot // ratecount
+
+    seller = product.seller
+    ar = [1, 2, 3, 4, 5]  
+
+    return render(request, 'User/ViewMore.html', {
+        'product': product,
+        'gallery': gallery,
+        'available': available,
+        'avg': avg,
+        'ratecount': ratecount,
+        'seller': seller,
+        'ar': ar
+    })
+
 def AddCart(request,pid):
     productdata=tbl_product.objects.get(id=pid)
     userdata=tbl_user.objects.get(id=request.session["uid"])

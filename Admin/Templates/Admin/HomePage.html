@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <table border="1" align="center" cellpadding="10" >
+    <table border="1" align="center" cellpadding="10">
         <tr>
             <td><a href="{% url 'Admin:AdminRegistration' %}">AdminRegistration</a></td>
         </tr>
@@ -27,6 +27,14 @@
         </tr>
         <tr>
             <td><a href="{% url 'Admin:SellerVerification' %}">Seller Verification</a></td>
+        </tr>
+        <tr>
+            <td>
+                <a href="{% url 'Admin:UserList' %}">User List</a>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="{% url 'Admin:ViewComplaint' %}">View Complaint</a></td>
         </tr>
     </table>
 </body>
